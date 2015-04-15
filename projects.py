@@ -18,11 +18,10 @@ STATUS_NEW = 'NEW'
 STATUS_SUCCESS = 'SUCCESS'
 STATUS_FAILURE = 'FAILURE'
 
-
 class Builder(object):
-    def __init__(self, project, workspace_dir, commit_id):
+    def __init__(self, config, project, commit_id):
         self.project = project
-        self.workspace_dir = workspace_dir
+        self.workspace_dir = os.path.join(config.workspace_base_dir, project['name'])
         self.commit_id = commit_id
         self.status = STATUS_NEW
 
@@ -82,9 +81,7 @@ def load_all(dir_name):
 
 def build(project_name, commit_id):
     project = _projects[project_name]
-    workspace_dir = os.path.join(_config.workspace_base_dir, project_name)
-
-    builder = Builder(project, workspace_dir, commit_id)
+    builder = Builder(_config, project, commit_id)
 
     try:
         builder.check_source()
