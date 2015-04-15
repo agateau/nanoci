@@ -3,7 +3,7 @@
 Create `~/.config/nanoci.yaml` with this content:
 
     workspace_base_dir: /where/to/checkout/code
-    log_dir: /where/to/store/logs                # defaults to ~/.cache/nanoci/log
+    log_base_dir: /where/to/store/logs                # defaults to ~/.cache/nanoci/log
 
 # Project config
 
