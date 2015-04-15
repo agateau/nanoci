@@ -41,6 +41,10 @@ And make it executable.
 
 # REST API
 
+## /projects/
+
+Returns the project list.
+
 ## /projects/$name/build
 
 Requests a build of project `name`.
