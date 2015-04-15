@@ -5,6 +5,8 @@ from subprocess import check_call, STDOUT, CalledProcessError
 
 import git
 
+from fileutils import read_path
+
 
 STATUS_NEW = 'NEW'
 STATUS_SUCCESS = 'SUCCESS'
@@ -32,7 +34,7 @@ class Builder(object):
         self.log.addHandler(logging.FileHandler(log_file_path))
 
     def check_source(self):
-        source_url = self.project['source']['url']
+        source_url = read_path(self.project['source']['url'])
         if not os.path.isdir(self.workspace_dir):
             git.clone(source_url, self.workspace_dir)
         git.update(self.workspace_dir, self.commit_id)
