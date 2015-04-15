@@ -11,14 +11,14 @@ Create `~/projects/foo.yaml` with this content:
 
     source:
         url: <git_url>
-    build_steps:
+    build:
         - type: shell
           name: build
           script: ...
         - type: shell
           name: test
           script: ...
-    notifiers:
+    notify:
         - type: shell
           name: notify
           script: ...

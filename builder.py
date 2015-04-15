@@ -37,7 +37,13 @@ class Builder(object):
             git.clone(source_url, self.workspace_dir)
         git.update(self.workspace_dir, self.commit_id)
 
-    def run_steps(self, steps):
+    def run_steps(self, step_type):
+        """
+        Run steps, returns True on success, False on failure
+        """
+        steps = self.project.get(step_type)
+        if not steps:
+            return True
         env = dict(os.environ)
         env.update({
             'WORKSPACE': self.workspace_dir,
@@ -47,8 +53,8 @@ class Builder(object):
             'BUILD_ID': str(self.build_id),
             'BUILD_STATUS': self.status,
         })
-        for step in steps:
-            name = step['name']
+        for idx, step in enumerate(steps):
+            name = step.get('name', '{}-{}'.format(step_type, idx + 1))
             self.log.info('Running step "%s"', name)
             script = step['script']
             try:
@@ -58,18 +64,18 @@ class Builder(object):
                                env=env, cwd=self.workspace_dir)
             except CalledProcessError as exc:
                 self.log.error('Command failed with exit code %d', exc.returncode)
-                self.status = STATUS_FAILURE
-                return
+                return False
+        return True
 
     def build(self):
         self.log.info('Starting build #%d', self.build_id)
         try:
             self.check_source()
-            self.run_steps(self.project['build_steps'])
-            self.status = STATUS_SUCCESS
+            ok = self.run_steps('build')
+            self.status = STATUS_SUCCESS if ok else STATUS_FAILURE
         except Exception as exc:
             self.log.exception(exc)
             self.status = STATUS_FAILURE
         finally:
             self.log.info('Build #%d finished: %s', self.build_id, self.status)
-            self.run_steps(self.project['notifiers'])
+            self.run_steps('notify')
