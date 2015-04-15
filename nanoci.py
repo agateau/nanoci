@@ -15,6 +15,12 @@ app = Flask(__name__)
 _running_builds = []
 
 
+@app.route('/projects/')
+def project_list():
+    dct = projects.get_all()
+    return json.dumps({'list': sorted(dct.keys())})
+
+
 @app.route('/projects/<name>/build')
 def build(name):
     commit_id = request.args.get('commit_id', 'origin/HEAD')
@@ -33,8 +39,8 @@ if __name__ == '__main__':
                         datefmt='%Y-%m-%d %H:%M:%S',
                         level=logging.INFO)
 
-    projects.init(os.path.expanduser('~/.config/nanoci.yaml'))
-    projects.load_all(sys.argv[1])
+    projects.init(os.path.expanduser('~/.config/nanoci/nanoci.yaml'))
+    projects.load_all(os.path.expanduser('~/.config/nanoci/projects'))
     app.run(debug=True)
 
 # vi: ts=4 sw=4 et

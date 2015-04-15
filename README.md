@@ -1,13 +1,13 @@
 # Global config
 
-Create `~/.config/nanoci.yaml` with this content:
+Create `~/.config/nanoci/nanoci.yaml` with this content:
 
     workspace_base_dir: /where/to/checkout/code
     log_base_dir: /where/to/store/logs                # defaults to ~/.cache/nanoci/log
 
 # Project config
 
-Create `~/projects/foo.yaml` with this content:
+Create `~/.config/nanoci/projects/foo.yaml` with this content:
 
     source:
         url: <git_url>
@@ -25,7 +25,7 @@ Create `~/projects/foo.yaml` with this content:
 
 # Start nanoci
 
-`python nanoci.py ~/projects`
+`python nanoci.py`
 
 Will listen on `http://localhost:5000`.
 

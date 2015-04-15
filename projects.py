@@ -15,6 +15,10 @@ def init(config_file):
     _config = Config(config_file)
 
 
+def get_all():
+    return _projects
+
+
 def load_all(dir_name):
     for name in os.listdir(dir_name):
         project_name, ext = os.path.splitext(name)
