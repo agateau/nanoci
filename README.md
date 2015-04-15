@@ -15,11 +15,14 @@ Content:
         url: <git_url>
     build_steps:
         - type: shell
+          name: build
           script: ...
         - type: shell
+          name: test
           script: ...
     notifiers:
         - type: shell
+          name: notify
           script: ...
 
 # Start nanoci
