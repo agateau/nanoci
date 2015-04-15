@@ -5,7 +5,7 @@ from subprocess import check_call, STDOUT, CalledProcessError
 
 import git
 
-from fileutils import read_path
+from fileutils import mkdir_p, read_path
 
 
 STATUS_NEW = 'NEW'
@@ -15,13 +15,17 @@ STATUS_FAILURE = 'FAILURE'
 class Builder(object):
     def __init__(self, config, project, commit_id):
         self.project = project
-        self.workspace_dir = os.path.join(config.workspace_base_dir, project['name'])
         self.commit_id = commit_id
         self.status = STATUS_NEW
 
+        self.work_dir = os.path.join(config.work_base_dir, project['name'])
+        self.src_dir = os.path.join(self.work_dir, 'src')
+
+        log_base_dir = os.path.join(self.work_dir, 'log')
+        mkdir_p(log_base_dir)
         self.build_id = 1
         while True:
-            self.log_dir = os.path.join(config.log_base_dir, str(self.build_id))
+            self.log_dir = os.path.join(log_base_dir, str(self.build_id))
             try:
                 os.mkdir(self.log_dir)
                 break
@@ -35,9 +39,9 @@ class Builder(object):
 
     def check_source(self):
         source_url = read_path(self.project['source']['url'])
-        if not os.path.isdir(self.workspace_dir):
-            git.clone(source_url, self.workspace_dir)
-        git.update(self.workspace_dir, self.commit_id)
+        if not os.path.isdir(self.src_dir):
+            git.clone(source_url, self.src_dir)
+        git.update(self.src_dir, self.commit_id)
 
     def run_steps(self, step_type):
         """
@@ -48,7 +52,7 @@ class Builder(object):
             return True
         env = dict(os.environ)
         env.update({
-            'WORKSPACE': self.workspace_dir,
+            'SRC_DIR': self.src_dir,
             'PROJECT_NAME': self.project['name'],
             'COMMIT_ID': self.commit_id,
             'SHORT_COMMIT_ID': self.commit_id[:8],
@@ -63,7 +67,7 @@ class Builder(object):
                 log_file_path = os.path.join(self.log_dir, 'step-{}.log'.format(name))
                 with open(log_file_path, 'w') as f:
                     check_call(script, shell=True, stderr=STDOUT, stdout=f,
-                               env=env, cwd=self.workspace_dir)
+                               env=env, cwd=self.src_dir)
             except CalledProcessError as exc:
                 self.log.error('Command failed with exit code %d', exc.returncode)
                 return False

@@ -1,10 +1,3 @@
-# Global config
-
-Create `~/.config/nanoci/nanoci.yaml` with this content:
-
-    workspace_base_dir: /where/to/checkout/code
-    log_base_dir: /where/to/store/logs                # defaults to ~/.cache/nanoci/log
-
 # Project config
 
 Create `~/.config/nanoci/projects/foo.yaml` with this content:
@@ -22,6 +15,14 @@ Create `~/.config/nanoci/projects/foo.yaml` with this content:
         - type: shell
           name: notify
           script: ...
+
+# Global config
+
+You can customize the global configuration by creating
+`~/.config/nanoci/nanoci.yaml` with this content:
+
+    work_base_dir: /where/to/checkout/code  # defaults to ~/.cache/nanoci/
+
 
 # Start nanoci
 

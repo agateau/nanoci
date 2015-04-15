@@ -11,8 +11,5 @@ class Config(object):
         else:
             dct = path_or_dict
 
-        self.workspace_base_dir = read_path(dct['workspace_base_dir'])
-        self.log_base_dir = read_path(dct.get('log_base_dir', '~/.cache/nanoci/log'))
-
-        mkdir_p(self.workspace_base_dir)
-        mkdir_p(self.log_base_dir)
+        self.work_base_dir = read_path(dct.get('work_base_dir', '~/.cache/nanoci'))
+        mkdir_p(self.work_base_dir)

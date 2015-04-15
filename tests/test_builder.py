@@ -34,8 +34,7 @@ def test_builder(tmpdir, builder_info):
     url = create_repo(builder_info['dir'], tmpdir)
 
     config = Config({
-        'workspace_base_dir': os.path.join(tmpdir, 'src'),
-        'log_base_dir': os.path.join(tmpdir, 'log')
+        'work_base_dir': tmpdir,
     })
 
     project = {
