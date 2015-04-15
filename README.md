@@ -29,6 +29,16 @@ Create `~/projects/foo.yaml` with this content:
 
 Will listen on `http://localhost:5000`.
 
+# Trigger a build on each commit
+
+Create a .git/hooks/post-commit file with this content:
+
+    #!/bin/sh
+    commit_id=$(git rev-parse HEAD)
+    curl http://localhost:5000/projects/$name/build?commit_id=$commit_id
+
+And make it executable.
+
 # REST API
 
 ## /projects/$name/build
@@ -36,7 +46,6 @@ Will listen on `http://localhost:5000`.
 Requests a build of project `name`.
 
 The project name is the name of the project .yaml file, without extensions.
-
 
 ## /queue
 
