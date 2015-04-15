@@ -1,15 +1,13 @@
 # Global config
 
-Create ~/.config/nanoci.yaml
+Create `~/.config/nanoci.yaml` with this content:
 
-Content:
-    workspace_base_dir: /path/to/a/dir
+    workspace_base_dir: /where/to/checkout/code
+    log_dir: /where/to/store/logs                # defaults to ~/.cache/nanoci/log
 
 # Project config
 
-Create ~/projects/foo.yaml
-
-Content:
+Create `~/projects/foo.yaml` with this content:
 
     source:
         url: <git_url>
@@ -29,13 +27,17 @@ Content:
 
 `python nanoci.py ~/projects`
 
+Will listen on `http://localhost:5000`.
+
 # REST API
 
-## /projects/<name>/build
+## /projects/$name/build
+
+Requests a build of project `name`.
 
 The project name is the name of the project .yaml file, without extensions.
-Request building project <name>.
+
 
 ## /queue
 
-State of the queue
+Show the state of the queue.
