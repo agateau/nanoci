@@ -1,4 +1,3 @@
-from multiprocessing import Process
 from threading import Lock, Thread
 
 from copy import deepcopy
@@ -31,10 +30,13 @@ class ProcessQueue(object):
                 except IndexError:
                     return
                 args, kwargs = self._current
-            proc = Process(target=self._target, args=args, kwargs=kwargs)
-            proc.start()
-            proc.join()
+            self._target(*args, **kwargs)
 
     def get_queue(self):
         with self._lock:
             return deepcopy(self._current), deepcopy(self._queue)
+
+    def join(self):
+        if self._thread is None or not self._thread.is_alive():
+            return
+        self._thread.join()
