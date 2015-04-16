@@ -1,11 +1,12 @@
 import logging
 import os
 
-from subprocess import check_call, STDOUT, CalledProcessError
+from subprocess import CalledProcessError
 
 import git
 
 from fileutils import mkdir_p, read_path
+from subproclog import log_check_call
 
 
 STATUS_NEW = 'NEW'
@@ -38,10 +39,13 @@ class Builder(object):
         self.log.addHandler(logging.FileHandler(log_file_path))
 
     def check_source(self):
+        self.log.info('Running step "git"')
         source_url = read_path(self.project['source']['url'])
-        if not os.path.isdir(self.src_dir):
-            git.clone(source_url, self.src_dir)
-        git.update(self.src_dir, self.commit_id)
+        log_file_path = os.path.join(self.log_dir, 'step-git.log')
+        with open(log_file_path, 'w') as fp:
+            if not os.path.isdir(self.src_dir):
+                git.clone(fp, source_url, self.src_dir)
+            git.update(fp, self.src_dir, self.commit_id)
 
     def run_steps(self, step_type):
         """
@@ -65,9 +69,8 @@ class Builder(object):
             script = step['script']
             try:
                 log_file_path = os.path.join(self.log_dir, 'step-{}.log'.format(name))
-                with open(log_file_path, 'w') as f:
-                    check_call(script, shell=True, stderr=STDOUT, stdout=f,
-                               env=env, cwd=self.src_dir)
+                with open(log_file_path, 'w') as fp:
+                    log_check_call(fp, script, shell=True, env=env, cwd=self.src_dir)
             except CalledProcessError as exc:
                 self.log.error('Command failed with exit code %d', exc.returncode)
                 return False

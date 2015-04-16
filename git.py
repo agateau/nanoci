@@ -1,14 +1,10 @@
-import logging
-
-from subprocess import check_call
+from subproclog import log_check_call
 
 
-def clone(source_url, dst):
-    logging.info('Cloning %s', source_url)
-    check_call(['git', 'clone', source_url, dst])
+def clone(fp, source_url, dst):
+    log_check_call(fp, ['git', 'clone', source_url, dst])
 
 
-def update(worktree_dir, commit_id):
-    logging.info('Updating %s to %s', worktree_dir, commit_id)
-    check_call(['git', 'fetch'], cwd=worktree_dir)
-    check_call(['git', 'checkout', commit_id], cwd=worktree_dir)
+def update(fp, worktree_dir, commit_id):
+    log_check_call(fp, ['git', 'fetch'], cwd=worktree_dir)
+    log_check_call(fp, ['git', 'checkout', commit_id], cwd=worktree_dir)
