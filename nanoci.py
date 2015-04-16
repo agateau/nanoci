@@ -2,7 +2,6 @@
 import logging
 import json
 import os
-import sys
 
 from flask import Flask, request
 
@@ -12,7 +11,6 @@ import projects
 app = Flask(__name__)
 
 
-_running_builds = []
 
 
 @app.route('/projects/')
