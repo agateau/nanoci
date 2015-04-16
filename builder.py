@@ -33,7 +33,7 @@ class Builder(object):
                 self.build_id += 1
 
         log_file_path = os.path.join(self.log_dir, 'main.log')
-        self.log = logging.getLogger('build-{}'.format(self.build_id))
+        self.log = logging.getLogger('build-{}-{}'.format(project['name'], self.build_id))
         self.log.setLevel(logging.DEBUG)
         self.log.addHandler(logging.FileHandler(log_file_path))
 
