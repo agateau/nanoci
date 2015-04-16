@@ -3,18 +3,17 @@ from threading import Lock, Thread
 
 from copy import deepcopy
 
-import projects
-
 
 class ProcessQueue(object):
-    def __init__(self):
+    def __init__(self, target):
         self._lock = Lock()
         self._queue = []
         self._thread = None
+        self._target = target
 
-    def add(self, name, commit_id):
+    def add(self, *args, **kwargs):
         with self._lock:
-            self._queue.append((name, commit_id))
+            self._queue.append((args, kwargs))
             queue_size = len(self._queue)
 
         if self._thread is None or not self._thread.is_alive():
@@ -27,10 +26,10 @@ class ProcessQueue(object):
         while True:
             with self._lock:
                 try:
-                    name, commit_id = self._queue.pop(0)
+                    args, kwargs = self._queue.pop(0)
                 except IndexError:
                     return
-            proc = Process(target=projects.build, args=(name, commit_id))
+            proc = Process(target=self._target, args=args, kwargs=kwargs)
             proc.start()
             proc.join()
 

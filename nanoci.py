@@ -8,10 +8,10 @@ from flask import Flask, request
 import projects
 from process_queue import ProcessQueue
 
+
 app = Flask(__name__)
 
-
-_process_queue = ProcessQueue()
+_process_queue = ProcessQueue(projects.build)
 
 
 @app.route('/projects/')
