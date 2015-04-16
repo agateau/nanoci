@@ -5,12 +5,13 @@ import os
 
 from flask import Flask, request
 
-import process_queue
 import projects
+from process_queue import ProcessQueue
 
 app = Flask(__name__)
 
 
+_process_queue = ProcessQueue()
 
 
 @app.route('/projects/')
@@ -23,13 +24,13 @@ def project_list():
 def build(name):
     commit_id = request.args.get('commit_id', 'origin/HEAD')
     logging.info('Received request to build %s %s', name, commit_id)
-    qsize = process_queue.add(name, commit_id)
+    qsize = _process_queue.add(name, commit_id)
     return json.dumps({'queue_size': qsize})
 
 
 @app.route('/queue')
 def show_queue():
-    return json.dumps({'waiting': process_queue.get_queue()})
+    return json.dumps({'waiting': _process_queue.get_queue()})
 
 
 if __name__ == '__main__':

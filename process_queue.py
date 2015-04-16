@@ -6,37 +6,34 @@ from copy import deepcopy
 import projects
 
 
-_thread = None
-_lock = Lock()
-_queue = []
+class ProcessQueue(object):
+    def __init__(self):
+        self._lock = Lock()
+        self._queue = []
+        self._thread = None
 
+    def add(self, name, commit_id):
+        with self._lock:
+            self._queue.append((name, commit_id))
+            queue_size = len(self._queue)
 
-def worker():
-    while True:
-        with _lock:
-            try:
-                name, commit_id = _queue.pop(0)
-            except IndexError:
-                return
-        proc = Process(target=projects.build, args=(name, commit_id))
-        proc.start()
-        proc.join()
+        if self._thread is None or not self._thread.is_alive():
+            self._thread = Thread(target=self._worker)
+            self._thread.start()
 
+        return queue_size
 
-def add(name, commit_id):
-    global _thread
+    def _worker(self):
+        while True:
+            with self._lock:
+                try:
+                    name, commit_id = self._queue.pop(0)
+                except IndexError:
+                    return
+            proc = Process(target=projects.build, args=(name, commit_id))
+            proc.start()
+            proc.join()
 
-    with _lock:
-        _queue.append((name, commit_id))
-        queue_size = len(_queue)
-
-    if _thread is None or not _thread.is_alive():
-        _thread = Thread(target=worker)
-        _thread.start()
-
-    return queue_size
-
-
-def get_queue():
-    with _lock:
-        return deepcopy(_queue)
+    def get_queue(self):
+        with self._lock:
+            return deepcopy(self._queue)
