@@ -30,7 +30,20 @@ def build(name):
 
 @app.route('/queue')
 def show_queue():
-    return json.dumps({'waiting': _process_queue.get_queue()})
+    def _format_queue_args(queue_item):
+        if queue_item is None:
+            return None
+        args = queue_item[0]
+        return {
+            'name': args[0],
+            'commit_id': args[1]
+        }
+
+    current, queued = _process_queue.get_queue()
+    return json.dumps({
+        'current': _format_queue_args(current),
+        'queued': [_format_queue_args(x) for x in queued]
+    })
 
 
 if __name__ == '__main__':

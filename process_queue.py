@@ -8,6 +8,7 @@ class ProcessQueue(object):
     def __init__(self, target):
         self._lock = Lock()
         self._queue = []
+        self._current = None
         self._thread = None
         self._target = target
 
@@ -26,13 +27,14 @@ class ProcessQueue(object):
         while True:
             with self._lock:
                 try:
-                    args, kwargs = self._queue.pop(0)
+                    self._current = self._queue.pop(0)
                 except IndexError:
                     return
+                args, kwargs = self._current
             proc = Process(target=self._target, args=args, kwargs=kwargs)
             proc.start()
             proc.join()
 
     def get_queue(self):
         with self._lock:
-            return deepcopy(self._queue)
+            return deepcopy(self._current), deepcopy(self._queue)
