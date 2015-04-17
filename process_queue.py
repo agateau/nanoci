@@ -28,6 +28,7 @@ class ProcessQueue(object):
                 try:
                     self._current = self._queue.pop(0)
                 except IndexError:
+                    self._current = None
                     return
                 args, kwargs = self._current
             self._target(*args, **kwargs)

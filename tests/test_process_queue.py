@@ -28,3 +28,15 @@ def test_many_processes(tmpdir):
     lst = os.listdir(tmpdir)
     lst.sort()
     assert lst == flags
+
+
+def test_empty_at_end():
+    def job():
+        return 0
+    queue = ProcessQueue(job)
+    queue.add()
+    queue.join()
+
+    current, remaining = queue.get_queue()
+    assert current == None
+    assert remaining == []
