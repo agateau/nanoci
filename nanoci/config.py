@@ -17,3 +17,5 @@ class Config(object):
 
         self.work_base_dir = read_path(dct.get('work_base_dir', '~/.cache/nanoci'))
         mkdir_p(self.work_base_dir)
+
+        self.port = int(dct.get('port', '5000'))

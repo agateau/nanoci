@@ -51,7 +51,7 @@ def main():
                         level=logging.INFO)
 
     app = App()
-    webapp.run(debug=True)
+    webapp.run(port=app.config.port)
 
 if __name__ == '__main__':
     main()

@@ -21,6 +21,7 @@ Create `~/.config/nanoci/projects/foo.yaml` with this content:
 You can customize the global configuration by creating
 `~/.config/nanoci/nanoci.yaml` with this content:
 
+    port: 5000
     work_base_dir: /where/to/checkout/code  # defaults to ~/.cache/nanoci/
 
 
