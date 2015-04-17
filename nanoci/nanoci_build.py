@@ -4,7 +4,7 @@ import argparse
 
 import requests
 
-from app import App
+from nanoci.app import App
 
 
 DESCRIPTION = """\
