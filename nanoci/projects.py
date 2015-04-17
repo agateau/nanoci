@@ -2,17 +2,8 @@ import os
 
 import yaml
 
-from nanoci.builder import Builder
-from nanoci.config import Config
-
 
 _projects = {}
-_config = None
-
-
-def init(config_file):
-    global _config
-    _config = Config(config_file)
 
 
 def get_all():
@@ -29,9 +20,3 @@ def load_all(dir_name):
             dct = yaml.load(f)
             dct['name'] = project_name
             _projects[project_name] = dct
-
-
-def build(project_name, commit_id):
-    project = _projects[project_name]
-    builder = Builder(_config, project, commit_id)
-    builder.build()
