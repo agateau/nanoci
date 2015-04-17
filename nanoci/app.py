@@ -5,10 +5,12 @@ from nanoci.builder import Builder
 from nanoci.config import Config
 from nanoci.process_queue import ProcessQueue
 
+from nanoci.fileutils import read_path
+
 
 class App(object):
-    def __init__(self, config_dir):
-        self._config_dir = config_dir
+    def __init__(self, config_dir='~/.config/nanoci'):
+        self._config_dir = read_path(config_dir)
         self._config = None
         self._projects = None
         self._queue = ProcessQueue(self._build)

@@ -50,7 +50,7 @@ def main():
                         datefmt='%Y-%m-%d %H:%M:%S',
                         level=logging.INFO)
 
-    app = App(os.path.expanduser('~/.config/nanoci'))
+    app = App()
     webapp.run(debug=True)
 
 if __name__ == '__main__':
