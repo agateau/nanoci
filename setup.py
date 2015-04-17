@@ -26,11 +26,13 @@ setup(name=nanoci.__appname__,
     install_requires=[
         'flask',
         'pyyaml',
+        'requests',
     ],
     packages=['nanoci'],
     entry_points={
         'console_scripts': [
             'nanoci = nanoci.main:main',
+            'nanoci-build = nanoci.nanoci_build:main',
         ],
     }
 )
