@@ -2,8 +2,8 @@ import os
 
 import yaml
 
-from builder import Builder
-from config import Config
+from nanoci.builder import Builder
+from nanoci.config import Config
 
 
 _projects = {}

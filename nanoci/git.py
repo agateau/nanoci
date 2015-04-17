@@ -1,4 +1,4 @@
-from subproclog import log_check_call
+from nanoci.subproclog import log_check_call
 
 
 def clone(fp, source_url, dst):

@@ -1,6 +1,6 @@
 import yaml
 
-from fileutils import mkdir_p, read_path
+from nanoci.fileutils import mkdir_p, read_path
 
 
 class Config(object):

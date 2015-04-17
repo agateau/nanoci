@@ -7,8 +7,8 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.pardir))
 
 import pytest
 
-from builder import Builder, STATUS_SUCCESS, STATUS_FAILURE
-from config import Config
+from nanoci.builder import Builder, STATUS_SUCCESS, STATUS_FAILURE
+from nanoci.config import Config
 
 
 def create_repo(src_dir, tmpdir):

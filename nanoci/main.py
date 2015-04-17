@@ -5,8 +5,8 @@ import os
 
 from flask import Flask, request
 
-import projects
-from process_queue import ProcessQueue
+from nanoci import projects
+from nanoci.process_queue import ProcessQueue
 
 
 app = Flask(__name__)
@@ -46,7 +46,7 @@ def show_queue():
     })
 
 
-if __name__ == '__main__':
+def main():
     logging.basicConfig(format='%(asctime)s %(levelname)s: %(name)s/%(process)d: %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S',
                         level=logging.INFO)
@@ -55,4 +55,6 @@ if __name__ == '__main__':
     projects.load_all(os.path.expanduser('~/.config/nanoci/projects'))
     app.run(debug=True)
 
+if __name__ == '__main__':
+    main()
 # vi: ts=4 sw=4 et

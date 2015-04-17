@@ -3,10 +3,10 @@ import os
 
 from subprocess import CalledProcessError
 
-import git
+from nanoci import git
 
-from fileutils import mkdir_p, read_path
-from subproclog import log_check_call
+from nanoci.fileutils import mkdir_p, read_path
+from nanoci.subproclog import log_check_call
 
 
 STATUS_NEW = 'NEW'
