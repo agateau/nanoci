@@ -19,3 +19,7 @@ class Config(object):
         mkdir_p(self.work_base_dir)
 
         self.port = int(dct.get('port', '5000'))
+
+    @property
+    def server_url(self):
+        return 'http://localhost:{}'.format(self.port)
