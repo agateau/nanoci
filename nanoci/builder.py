@@ -70,6 +70,8 @@ class Builder(object):
             try:
                 log_file_path = os.path.join(self.log_dir, 'step-{}.log'.format(name))
                 with open(log_file_path, 'w') as fp:
+                    fp.write('# script\n{}# /script\n'.format(script))
+                    fp.flush()
                     log_check_call(fp, script, shell=True, env=env, cwd=self.src_dir)
             except CalledProcessError as exc:
                 self.log.error('Command failed with exit code %d', exc.returncode)
