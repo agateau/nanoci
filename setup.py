@@ -32,7 +32,7 @@ setup(name=nanoci.__appname__,
     packages=['nanoci'],
     entry_points={
         'console_scripts': [
-            'nanoci = nanoci.main:main',
+            'nanoci-server = nanoci.nanoci_server:main',
             'nanoci-build = nanoci.nanoci_build:main',
         ],
     }

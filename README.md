@@ -6,7 +6,7 @@ Optionally, run tests:
 
     python3 -m pytest -v
 
-# Project config
+# Project configuration
 
 Create `~/.config/nanoci/projects/foo.yaml` with this content:
 
@@ -24,7 +24,7 @@ Create `~/.config/nanoci/projects/foo.yaml` with this content:
           name: notify
           script: ...
 
-# Global config
+# Global configuration
 
 You can customize the global configuration by creating
 `~/.config/nanoci/nanoci.yaml` with this content:
@@ -35,7 +35,8 @@ You can customize the global configuration by creating
 
 # Start nanoci
 
-Run `nanoci`. This will start the daemon, listening on port 5000 by default.
+Run `nanoci-server`. This will start the server on port 5000 (unless you
+changed the global configuration).
 
 # Trigger a build on each commit
 
