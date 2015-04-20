@@ -1,8 +1,4 @@
 import os
-import sys
-
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.pardir))
 
 from nanoci.subproclog import log_check_call
 

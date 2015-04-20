@@ -27,6 +27,7 @@ setup(name=nanoci.__appname__,
         'flask',
         'pyyaml',
         'requests',
+        'pytest',
     ],
     packages=['nanoci'],
     entry_points={

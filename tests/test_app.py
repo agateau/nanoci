@@ -1,9 +1,6 @@
 import os
-import sys
 
 import yaml
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), os.pardir))
 
 from nanoci.app import App
 

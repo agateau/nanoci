@@ -2,6 +2,10 @@
 
     ./setup.py install
 
+Optionally, run tests:
+
+    python3 -m pytest -v
+
 # Project config
 
 Create `~/.config/nanoci/projects/foo.yaml` with this content:
