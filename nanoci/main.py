@@ -14,12 +14,6 @@ queue = None
 webapp = Flask(__name__)
 
 
-@webapp.route('/projects/')
-def project_list():
-    dct = app.projects
-    return json.dumps({'list': sorted(dct.keys())})
-
-
 @webapp.route('/projects/<name>/build')
 def build(name):
     commit_id = request.args.get('commit_id', 'origin/HEAD')
@@ -47,7 +41,7 @@ def show_queue():
 
 
 def _build(name, commit_id):
-    project = app.projects[name]
+    project = app.get_project(name)
     builder = Builder(app.config, project, commit_id)
     builder.build()
 
@@ -62,6 +56,7 @@ def main():
     app = App()
     queue = ProcessQueue(_build)
     webapp.run(port=app.config.port)
+
 
 if __name__ == '__main__':
     main()

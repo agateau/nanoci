@@ -1,6 +1,7 @@
 import os
 
-from nanoci import projects
+import yaml
+
 from nanoci.config import Config
 
 from nanoci.fileutils import read_path
@@ -18,10 +19,19 @@ class App(object):
             self._config = Config(os.path.join(self._config_dir, 'nanoci.yaml'))
         return self._config
 
-    @property
-    def projects(self):
-        if self._projects == None:
-            # FIXME: Refactor to turn projects into a class?
-            projects.load_all(os.path.join(self._config_dir, 'projects'))
-            self._projects = projects.get_all()
-        return self._projects
+    def has_project(self, name):
+        return os.path.exists(self._get_project_path(name))
+
+    def get_project(self, name):
+        """Load a project by name, returns a dictionary of its definition.
+        Each call re-reads the project from its file so the returned definition
+        is always up to date.
+        """
+        project_path = self._get_project_path(name)
+        with open(project_path) as f:
+            dct = yaml.load(f)
+            dct['name'] = name
+            return dct
+
+    def _get_project_path(self, name):
+        return os.path.join(self._config_dir, 'projects', name + '.yaml')
