@@ -1,3 +1,7 @@
+# Install
+
+    ./setup.py install
+
 # Project config
 
 Create `~/.config/nanoci/projects/foo.yaml` with this content:
