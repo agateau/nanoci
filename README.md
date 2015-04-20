@@ -35,9 +35,7 @@ You can customize the global configuration by creating
 
 # Start nanoci
 
-`python nanoci.py`
-
-Will listen on `http://localhost:5000`.
+Run `nanoci`. This will start the daemon, listening on port 5000 by default.
 
 # Trigger a build on each commit
 
@@ -45,22 +43,6 @@ Create a .git/hooks/post-commit file with this content:
 
     #!/bin/sh
     commit_id=$(git rev-parse HEAD)
-    curl http://localhost:5000/projects/$name/build?commit_id=$commit_id
+    nanoci-build $name $commit_id
 
 And make it executable.
-
-# REST API
-
-## /projects/
-
-Returns the project list.
-
-## /projects/$name/build
-
-Requests a build of project `name`.
-
-The project name is the name of the project .yaml file, without extensions.
-
-## /queue
-
-Show the state of the queue.
