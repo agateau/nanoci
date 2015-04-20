@@ -1,9 +1,7 @@
 import os
 
 from nanoci import projects
-from nanoci.builder import Builder
 from nanoci.config import Config
-from nanoci.process_queue import ProcessQueue
 
 from nanoci.fileutils import read_path
 
@@ -13,7 +11,6 @@ class App(object):
         self._config_dir = read_path(config_dir)
         self._config = None
         self._projects = None
-        self._queue = ProcessQueue(self._build)
 
     @property
     def config(self):
@@ -28,12 +25,3 @@ class App(object):
             projects.load_all(os.path.join(self._config_dir, 'projects'))
             self._projects = projects.get_all()
         return self._projects
-
-    @property
-    def queue(self):
-        return self._queue
-
-    def _build(self, name, commit_id):
-        project = self.projects[name]
-        builder = Builder(self._config, project, commit_id)
-        builder.build()

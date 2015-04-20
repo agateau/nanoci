@@ -27,4 +27,3 @@ def test_app_properties(tmpdir):
     config = app.config
     projects = app.projects
     assert set(projects.keys()) == {'foo', 'bar'}
-    queue = app.queue

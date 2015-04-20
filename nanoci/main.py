@@ -5,9 +5,12 @@ import json
 from flask import Flask, request
 
 from nanoci.app import App
+from nanoci.builder import Builder
+from nanoci.process_queue import ProcessQueue
 
 
 app = None
+queue = None
 webapp = Flask(__name__)
 
 
@@ -21,7 +24,7 @@ def project_list():
 def build(name):
     commit_id = request.args.get('commit_id', 'origin/HEAD')
     logging.info('Received request to build %s %s', name, commit_id)
-    qsize = app.queue.add(name, commit_id)
+    qsize = queue.add(name, commit_id)
     return json.dumps({'queue_size': qsize})
 
 
@@ -43,13 +46,21 @@ def show_queue():
     })
 
 
+def _build(name, commit_id):
+    project = app.projects[name]
+    builder = Builder(app.config, project, commit_id)
+    builder.build()
+
+
 def main():
     global app
+    global queue
     logging.basicConfig(format='%(asctime)s %(levelname)s: %(name)s/%(process)d: %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S',
                         level=logging.INFO)
 
     app = App()
+    queue = ProcessQueue(_build)
     webapp.run(port=app.config.port)
 
 if __name__ == '__main__':
