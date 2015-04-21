@@ -83,7 +83,7 @@ class Builder(object):
         return True
 
     def build(self):
-        self.log('Starting build')
+        self.log('Starting build #{}'.format(self.build_id))
         try:
             self.check_source()
             ok = self.run_steps('build')
@@ -92,5 +92,5 @@ class Builder(object):
             self.log('Build failed with an exception: {}'.format(exc))
             self.status = STATUS_FAILURE
         finally:
-            self.log('Build finished: {}'.format(self.status))
+            self.log('Build #{} finished: {}'.format(self.build_id, self.status))
             self.run_steps('notify')
