@@ -34,6 +34,7 @@ setup(name=nanoci.__appname__,
         'console_scripts': [
             'nanoci-server = nanoci.nanoci_server:main',
             'nanoci-build = nanoci.nanoci_build:main',
+            'nanoci-log = nanoci.nanoci_log:main',
         ],
     }
 )
