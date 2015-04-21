@@ -38,6 +38,11 @@ You can customize the global configuration by creating
 Run `nanoci-server`. This will start the server on port 5000 (unless you
 changed the global configuration).
 
+# Other commands
+
+- `nanoci-build`: start a build
+- `nanoci-log`: show the log of a build
+
 # Trigger a build on each commit
 
 Create a `.git/hooks/post-commit` file with this content:
