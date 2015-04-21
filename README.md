@@ -1,4 +1,6 @@
-# Install
+# Nanoci
+
+## Install
 
     ./setup.py install
 
@@ -6,7 +8,7 @@ Optionally, run tests:
 
     python3 -m pytest -v
 
-# Project configuration
+## Project configuration
 
 Create `~/.config/nanoci/projects/foo.yaml` with this content:
 
@@ -24,26 +26,28 @@ Create `~/.config/nanoci/projects/foo.yaml` with this content:
           name: notify
           script: ...
 
-# Global configuration
+## Global configuration
 
 You can customize the global configuration by creating
 `~/.config/nanoci/nanoci.yaml` with this content:
 
+    # Port to listen to
     port: 5000
-    work_base_dir: /where/to/checkout/code  # defaults to ~/.cache/nanoci/
+    # Where to checkout code and store build logs
+    work_base_dir: ~/.cache/nanoci
 
 
-# Start nanoci
+## Starting nanoci
 
 Run `nanoci-server`. This will start the server on port 5000 (unless you
 changed the global configuration).
 
-# Other commands
+## Other commands
 
 - `nanoci-build`: start a build
 - `nanoci-log`: show the log of a build
 
-# Trigger a build on each commit
+## Triggering a build on each commit
 
 Create a `.git/hooks/post-commit` file with this content:
 
