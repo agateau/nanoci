@@ -14,15 +14,15 @@ STATUS_SUCCESS = 'SUCCESS'
 STATUS_FAILURE = 'FAILURE'
 
 class Builder(object):
+    BUILD_LOG_NAME = 'build.log'
+
     def __init__(self, config, project, commit_id):
         self.project = project
         self.commit_id = commit_id
         self.status = STATUS_NEW
 
-        self.work_dir = os.path.join(config.work_base_dir, project['name'])
-        self.src_dir = os.path.join(self.work_dir, 'src')
-
-        log_base_dir = os.path.join(self.work_dir, 'log')
+        self.src_dir = Builder.get_src_base_dir(config, project['name'])
+        log_base_dir = Builder.get_log_base_dir(config, project['name'])
         mkdir_p(log_base_dir)
         self.build_id = 1
         while True:
@@ -33,7 +33,15 @@ class Builder(object):
             except OSError:
                 self.build_id += 1
 
-        self.log_file_path = os.path.join(self.log_dir, 'build.log')
+        self.log_file_path = os.path.join(self.log_dir, Builder.BUILD_LOG_NAME)
+
+    @staticmethod
+    def get_log_base_dir(config, project_name):
+        return os.path.join(config.work_base_dir, project_name, 'log')
+
+    @staticmethod
+    def get_src_base_dir(config, project_name):
+        return os.path.join(config.work_base_dir, project_name, 'src')
 
     def log(self, message):
         # We do not use the logging module because we want to have one single
