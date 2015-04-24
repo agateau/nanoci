@@ -1,4 +1,5 @@
 import os
+import traceback
 
 from datetime import datetime
 from subprocess import CalledProcessError
@@ -97,7 +98,8 @@ class Builder(object):
             ok = self.run_steps('build')
             self.status = STATUS_SUCCESS if ok else STATUS_FAILURE
         except Exception as exc:
-            self.log('Build failed with an exception: {}'.format(exc))
+            trace = traceback.format_exc()
+            self.log('Build failed with an exception:\n{}'.format(trace))
             self.status = STATUS_FAILURE
         finally:
             self.log('Build #{} finished: {}'.format(self.build_id, self.status))
