@@ -87,7 +87,7 @@ class Builder(object):
                     fp.flush()
                     log_check_call(fp, script, shell=True, env=env, cwd=self.src_dir)
             except CalledProcessError as exc:
-                self.log('Command failed with exit code %d', exc.returncode)
+                self.log('Command failed with exit code {}'.format(exc.returncode))
                 return False
         return True
 
