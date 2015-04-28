@@ -42,7 +42,7 @@ def test_reload_project(tmpdir):
     foo = app.get_project('foo')
     assert foo['a'] == 1
 
-    with open(app._get_project_path('foo'), 'wt') as fp:
+    with open(app.config._get_project_path('foo'), 'wt') as fp:
         yaml.dump(dict(a=2), fp)
 
     foo = app.get_project('foo')
