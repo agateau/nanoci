@@ -5,15 +5,15 @@ from nanoci.fileutils import mkdir_p, read_path
 
 
 class Config(object):
-    def __init__(self, path_or_dict):
-        if isinstance(path_or_dict, str):
-            if os.path.exists(path_or_dict):
-                with open(path_or_dict) as f:
-                    dct = yaml.load(f)
-            else:
-                dct = {}
+    def __init__(self, config_dir='~/.config/nanoci'):
+        self._config_dir = read_path(config_dir)
+
+        config_file = os.path.join(self._config_dir, 'nanoci.yaml')
+        if os.path.exists(config_file):
+            with open(config_file) as f:
+                dct = yaml.load(f)
         else:
-            dct = path_or_dict
+            dct = {}
 
         self._work_base_dir = read_path(dct.get('work_base_dir', '~/.cache/nanoci'))
         mkdir_p(self._work_base_dir)
@@ -23,6 +23,10 @@ class Config(object):
     @property
     def server_url(self):
         return 'http://localhost:{}'.format(self._port)
+
+    @property
+    def config_dir(self):
+        return self._config_dir
 
     @property
     def work_base_dir(self):

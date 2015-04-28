@@ -4,19 +4,14 @@ import yaml
 
 from nanoci.config import Config
 
-from nanoci.fileutils import read_path
-
 
 class App(object):
     def __init__(self, config_dir='~/.config/nanoci'):
-        self._config_dir = read_path(config_dir)
-        self._config = None
+        self._config = Config(config_dir)
         self._projects = None
 
     @property
     def config(self):
-        if self._config == None:
-            self._config = Config(os.path.join(self._config_dir, 'nanoci.yaml'))
         return self._config
 
     def has_project(self, name):
@@ -34,4 +29,4 @@ class App(object):
             return dct
 
     def _get_project_path(self, name):
-        return os.path.join(self._config_dir, 'projects', name + '.yaml')
+        return os.path.join(self._config.config_dir, 'projects', name + '.yaml')
