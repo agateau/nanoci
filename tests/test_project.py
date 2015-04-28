@@ -1,4 +1,6 @@
-from nanoci.project import Project
+import pytest
+
+from nanoci.project import Project, ProjectError
 
 
 def test_project():
@@ -10,8 +12,10 @@ def test_project():
     })
 
     assert prj.name == 'test'
-    assert prj.build_steps == [build1]
-    assert prj.notify_steps == [notify1]
+    assert len(prj.build_steps) == 1
+    assert prj.build_steps[0]._arguments == build1
+    assert len(prj.notify_steps) == 1
+    assert prj.notify_steps[0]._arguments == notify1
 
 
 def test_project_build_only():
@@ -21,5 +25,16 @@ def test_project_build_only():
     })
 
     assert prj.name == 'test'
-    assert prj.build_steps == [build1]
-    assert prj.notify_steps == []
+    assert len(prj.build_steps) == 1
+    assert prj.build_steps[0]._arguments == build1
+    assert len(prj.notify_steps) == 0
+
+
+def test_project_unknown_step():
+    with pytest.raises(ProjectError):
+        prj = Project('test', {
+            'build': [
+                dict(command='shell', script='make'),
+                dict(command='unknown')
+            ]
+        })

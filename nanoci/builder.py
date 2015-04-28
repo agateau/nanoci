@@ -75,15 +75,8 @@ class Builder(object):
             'BUILD_STATUS': self.status,
         })
         for idx, step in enumerate(steps):
-            name = step.get('name', '{}-{}'.format(step_type, idx + 1))
-            self.log('Running step "{}"'.format(name))
-            script = step['script']
-            try:
-                self.log_fp.write('## Script\n{}\n## Output\n'.format(script.strip()))
-                self.log_fp.flush()
-                log_check_call(self.log_fp, script, shell=True, env=env, cwd=self.src_dir)
-            except CalledProcessError as exc:
-                self.log('Command failed with exit code {}'.format(exc.returncode))
+            self.log('Running step {}-{}'.format(step_type, idx + 1))
+            if not step.run(self.log_fp, env=env):
                 return False
         return True
 
