@@ -4,12 +4,12 @@ import json
 
 from flask import Flask, request
 
-from nanoci.app import App
 from nanoci.builder import Builder
+from nanoci.config import Config
 from nanoci.process_queue import ProcessQueue
 
 
-app = None
+config = None
 queue = None
 webapp = Flask(__name__)
 
@@ -33,7 +33,7 @@ def show_queue():
             'commit_id': args[1]
         }
 
-    current, queued = app.queue.get_queue()
+    current, queued = queue.get_queue()
     return json.dumps({
         'current': _format_queue_args(current),
         'queued': [_format_queue_args(x) for x in queued]
@@ -41,21 +41,21 @@ def show_queue():
 
 
 def _build(name, commit_id):
-    project = app.get_project(name)
-    builder = Builder(app.config, project, commit_id)
+    project = config.get_project(name)
+    builder = Builder(config, project, commit_id)
     builder.build()
 
 
 def main():
-    global app
+    global config
     global queue
     logging.basicConfig(format='%(asctime)s %(levelname)s: %(name)s/%(process)d: %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S',
                         level=logging.INFO)
 
-    app = App()
+    config = Config()
     queue = ProcessQueue(_build)
-    webapp.run(port=app.config.port)
+    webapp.run(port=config.port)
 
 
 if __name__ == '__main__':

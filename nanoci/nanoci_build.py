@@ -4,7 +4,7 @@ import argparse
 
 import requests
 
-from nanoci.app import App
+from nanoci.config import Config
 
 
 DESCRIPTION = """\
@@ -20,8 +20,8 @@ def main():
     args = parser.parse_args()
     project_name = args.name
 
-    app = App()
-    if not app.has_project(project_name):
+    config = Config()
+    if not config.has_project(project_name):
         parser.error('Invalid project name {}'.format(project_name))
 
     if args.commit_id:
@@ -29,7 +29,7 @@ def main():
     else:
         params = {}
 
-    url = app.config.server_url + '/projects/{}/build'.format(project_name)
+    url = config.server_url + '/projects/{}/build'.format(project_name)
     res = requests.get(url, params=params)
     if res.status_code == 200:
         print('Build scheduled')

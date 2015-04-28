@@ -3,7 +3,7 @@ import os
 import sys
 import argparse
 
-from nanoci.app import App
+from nanoci.config import Config
 from nanoci.builder import Builder
 
 
@@ -21,11 +21,11 @@ def main():
     args = parser.parse_args()
     project_name = args.name
 
-    app = App()
-    if not app.has_project(project_name):
+    config = Config()
+    if not config.has_project(project_name):
         parser.error('Invalid project name {}'.format(project_name))
 
-    log_base_dir = Builder.get_log_base_dir(app.config, project_name)
+    log_base_dir = Builder.get_log_base_dir(config, project_name)
     if args.build_id is None:
         ids = [int(x) for x in os.listdir(log_base_dir) if x.isdigit()]
         build_id = str(max(ids))

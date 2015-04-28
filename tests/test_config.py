@@ -2,7 +2,7 @@ import os
 
 import yaml
 
-from nanoci.app import App
+from nanoci.config import Config
 
 from nanoci.fileutils import mkdir_p
 
@@ -14,36 +14,30 @@ def create_project(tmpdir, name, dct):
         yaml.dump(dct, fp)
 
 
-def test_app_config(tmpdir):
+def test_projects(tmpdir):
     tmpdir = str(tmpdir)
-    app = App(config_dir=tmpdir)
-    config = app.config
-
-
-def test_app_projects(tmpdir):
-    tmpdir = str(tmpdir)
-    app = App(config_dir=tmpdir)
+    config = Config(config_dir=tmpdir)
     create_project(tmpdir, 'foo', dict(a=1))
     create_project(tmpdir, 'bar', dict())
 
-    assert app.has_project('foo')
-    assert app.has_project('bar')
-    assert not app.has_project('baz')
+    assert config.has_project('foo')
+    assert config.has_project('bar')
+    assert not config.has_project('baz')
 
-    foo = app.get_project('foo')
+    foo = config.get_project('foo')
     assert foo['a'] == 1
 
 
 def test_reload_project(tmpdir):
     tmpdir = str(tmpdir)
-    app = App(config_dir=tmpdir)
+    config = Config(config_dir=tmpdir)
     create_project(tmpdir, 'foo', dict(a=1))
 
-    foo = app.get_project('foo')
+    foo = config.get_project('foo')
     assert foo['a'] == 1
 
-    with open(app.config._get_project_path('foo'), 'wt') as fp:
+    with open(config._get_project_path('foo'), 'wt') as fp:
         yaml.dump(dict(a=2), fp)
 
-    foo = app.get_project('foo')
+    foo = config.get_project('foo')
     assert foo['a'] == 2
