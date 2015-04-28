@@ -9,9 +9,20 @@ class Project(object):
         else:
             self._dct = read_yaml_dict(path_or_dict)
 
+        self._build_steps = self._dct.get('build', [])
+        self._notify_steps = self._dct.get('notify', [])
+
     @property
     def name(self):
         return self._name
+
+    @property
+    def build_steps(self):
+        return self._build_steps
+
+    @property
+    def notify_steps(self):
+        return self._notify_steps
 
     def __getitem__(self, name):
         return self._dct[name]

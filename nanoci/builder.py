@@ -59,11 +59,10 @@ class Builder(object):
         git.update(self.log_fp, self.src_dir, self.commit_id)
         self.log_fp.flush()
 
-    def run_steps(self, step_type):
+    def run_steps(self, step_type, steps):
         """
         Run steps, returns True on success, False on failure
         """
-        steps = self.project.get(step_type)
         if not steps:
             return True
         env = dict(os.environ)
@@ -94,7 +93,7 @@ class Builder(object):
             self.log('Starting build #{}'.format(self.build_id))
             try:
                 self.check_source()
-                ok = self.run_steps('build')
+                ok = self.run_steps('build', self.project.build_steps)
                 self.status = STATUS_SUCCESS if ok else STATUS_FAILURE
             except Exception as exc:
                 trace = traceback.format_exc()
@@ -102,4 +101,4 @@ class Builder(object):
                 self.status = STATUS_FAILURE
             finally:
                 self.log('Build #{} finished: {}'.format(self.build_id, self.status))
-                self.run_steps('notify')
+                self.run_steps('notify', self.project.notify_steps)
