@@ -2,6 +2,7 @@ import os
 import yaml
 
 from nanoci.fileutils import mkdir_p, read_path
+from nanoci.project import Project
 
 
 class Config(object):
@@ -40,15 +41,12 @@ class Config(object):
         return os.path.exists(self._get_project_path(name))
 
     def get_project(self, name):
-        """Load a project by name, returns a dictionary of its definition.
-        Each call re-reads the project from its file so the returned definition
-        is always up to date.
+        """Load a project by name, returns a Project instance. Each call
+        re-reads the project from its file so the returned object is always up
+        to date.
         """
         project_path = self._get_project_path(name)
-        with open(project_path) as f:
-            dct = yaml.load(f)
-            dct['name'] = name
-            return dct
+        return Project(name, project_path)
 
     def _get_project_path(self, name):
         return os.path.join(self._config_dir, 'projects', name + '.yaml')

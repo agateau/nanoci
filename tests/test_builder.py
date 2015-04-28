@@ -5,6 +5,7 @@ import subprocess
 import pytest
 
 from nanoci.builder import Builder, STATUS_SUCCESS, STATUS_FAILURE
+from nanoci.project import Project
 
 
 class FakeObject(object):
@@ -40,15 +41,14 @@ def test_builder(tmpdir, builder_info):
         'work_base_dir': tmpdir,
     })
 
-    project = {
-        'name': 'test',
+    project = Project('test', {
         'source': {
             'url': url
         },
         'build': [{
             'script': './build.sh'
         }]
-    }
+    })
 
     builder = Builder(config, project, 'HEAD')
     builder.build()

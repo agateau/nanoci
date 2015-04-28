@@ -22,8 +22,8 @@ class Builder(object):
         self.commit_id = commit_id
         self.status = STATUS_NEW
 
-        self.src_dir = Builder.get_src_base_dir(config, project['name'])
-        log_base_dir = Builder.get_log_base_dir(config, project['name'])
+        self.src_dir = Builder.get_src_base_dir(config, project.name)
+        log_base_dir = Builder.get_log_base_dir(config, project.name)
         mkdir_p(log_base_dir)
         self.build_id = 1
         while True:
@@ -69,7 +69,7 @@ class Builder(object):
         env = dict(os.environ)
         env.update({
             'SRC_DIR': self.src_dir,
-            'PROJECT_NAME': self.project['name'],
+            'PROJECT_NAME': self.project.name,
             'COMMIT_ID': self.commit_id,
             'SHORT_COMMIT_ID': self.commit_id[:8],
             'BUILD_ID': str(self.build_id),
