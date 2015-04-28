@@ -15,11 +15,19 @@ class Config(object):
         else:
             dct = path_or_dict
 
-        self.work_base_dir = read_path(dct.get('work_base_dir', '~/.cache/nanoci'))
-        mkdir_p(self.work_base_dir)
+        self._work_base_dir = read_path(dct.get('work_base_dir', '~/.cache/nanoci'))
+        mkdir_p(self._work_base_dir)
 
-        self.port = int(dct.get('port', '5000'))
+        self._port = int(dct.get('port', '5000'))
 
     @property
     def server_url(self):
-        return 'http://localhost:{}'.format(self.port)
+        return 'http://localhost:{}'.format(self._port)
+
+    @property
+    def work_base_dir(self):
+        return self._work_base_dir
+
+    @property
+    def port(self):
+        return self._port
