@@ -1,7 +1,6 @@
 import os
 
 from nanoci.fileutils import mkdir_p, read_path, read_yaml_dict
-from nanoci.project import Project
 
 
 class Config(object):
@@ -33,15 +32,7 @@ class Config(object):
         return self._port
 
     def has_project(self, name):
-        return os.path.exists(self._get_project_path(name))
+        return os.path.exists(self.get_project_path(name))
 
-    def get_project(self, name):
-        """Load a project by name, returns a Project instance. Each call
-        re-reads the project from its file so the returned object is always up
-        to date.
-        """
-        project_path = self._get_project_path(name)
-        return Project(name, project_path)
-
-    def _get_project_path(self, name):
+    def get_project_path(self, name):
         return os.path.join(self._config_dir, 'projects', name + '.yaml')

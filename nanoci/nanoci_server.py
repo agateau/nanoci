@@ -7,6 +7,7 @@ from flask import Flask, request
 from nanoci.builder import Builder
 from nanoci.config import Config
 from nanoci.process_queue import ProcessQueue
+from nanoci.project import Project
 
 
 config = None
@@ -41,7 +42,8 @@ def show_queue():
 
 
 def _build(name, commit_id):
-    project = config.get_project(name)
+    project_path = config.get_project_path(name)
+    project = Project(name, project_path)
     builder = Builder(config, project, commit_id)
     builder.build()
 

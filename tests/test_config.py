@@ -29,19 +29,4 @@ def test_projects(tmpdir):
     assert config.has_project('bar')
     assert not config.has_project('baz')
 
-    foo = config.get_project('foo')
-    assert foo.build_steps[0]._arguments == {'script': 'make'}
-
-
-def test_reload_project(tmpdir):
-    tmpdir = str(tmpdir)
-    config = Config(config_dir=tmpdir)
-    create_project(tmpdir, 'foo', build=[{'script':'make'}])
-
-    foo = config.get_project('foo')
-    assert foo.build_steps[0]._arguments == {'script': 'make'}
-
-    create_project(tmpdir, 'foo', build=[{'script':'make test'}])
-
-    foo = config.get_project('foo')
-    assert foo.build_steps[0]._arguments == {'script': 'make test'}
+    assert config.get_project_path('foo') == os.path.join(tmpdir, 'projects/foo.yaml')
