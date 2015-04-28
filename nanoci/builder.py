@@ -47,13 +47,6 @@ class Builder(object):
         self.log_fp.write('# ' + timestamp + ': ' + message + '\n')
         self.log_fp.flush()
 
-    def check_source(self):
-        from nanoci.gitcommand import GitCommand
-        cmd = GitCommand()
-        source_url = self.project['source']['url']
-        env = {'SRC_DIR': self.src_dir, 'COMMIT_ID': self.commit_id}
-        cmd.run({'url': source_url}, self.log_fp, env=env)
-
     def run_steps(self, step_type, steps):
         """
         Run steps, returns True on success, False on failure
@@ -80,7 +73,6 @@ class Builder(object):
         with open(log_file_path, 'w') as self.log_fp:
             self.log('Starting build #{}'.format(self.build_id))
             try:
-                self.check_source()
                 ok = self.run_steps('build', self.project.build_steps)
                 self.status = STATUS_SUCCESS if ok else STATUS_FAILURE
             except Exception as exc:

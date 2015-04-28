@@ -45,6 +45,15 @@ class Project(object):
         self._build_steps = _load_steps(self._dct, 'build')
         self._notify_steps = _load_steps(self._dct, 'notify')
 
+        # Legacy code, should go away
+        if 'source' in self._dct:
+            self._insert_git_step(self._dct['source']['url'])
+
+    def _insert_git_step(self, url):
+        from nanoci.gitcommand import GitCommand
+        step = Step(GitCommand(), arguments={'url': url})
+        self._build_steps.insert(0, step)
+
     @property
     def name(self):
         return self._name
