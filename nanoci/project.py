@@ -1,5 +1,4 @@
 from nanoci.fileutils import read_yaml_dict
-from nanoci.step import Step
 
 
 class ProjectError(Exception):
@@ -11,25 +10,25 @@ def _load_steps(dct, category):
     if in_lst is None:
         return []
 
-    # FIXME: get available commands from somewhere else
-    from nanoci.gitcommand import GitCommand
-    from nanoci.shellcommand import ShellCommand
-    commands = {}
-    def add_command(klass):
-        commands[klass.name] = klass()
-    add_command(ShellCommand)
-    add_command(GitCommand)
+    # FIXME: get available step_classes from somewhere else
+    from nanoci.gitstep import GitStep
+    from nanoci.shellstep import ShellStep
+    step_classes = {}
+    def add_step_class(klass):
+        step_classes[klass.type] = klass
+    add_step_class(ShellStep)
+    add_step_class(GitStep)
 
     out_lst = []
     for idx, dct in enumerate(in_lst):
-        name = dct.get('command', 'shell')
+        ttype = dct.get('type', 'shell')
         try:
-            command = commands[name]
+            step_class = step_classes[ttype]
         except KeyError:
-            raise ProjectError('{}-{}: Unknown command "{}"'
-                               .format(category, idx + 1, name))
+            raise ProjectError('{}-{}: Unknown step type "{}"'
+                               .format(category, idx + 1, ttype))
         arguments = dct
-        step = Step(command, arguments)
+        step = step_class(arguments)
         out_lst.append(step)
     return out_lst
 
@@ -50,8 +49,8 @@ class Project(object):
             self._insert_git_step(dct['source']['url'])
 
     def _insert_git_step(self, url):
-        from nanoci.gitcommand import GitCommand
-        step = Step(GitCommand(), arguments={'url': url})
+        from nanoci.gitstep import GitStep
+        step = GitStep(arguments={'url': url})
         self._build_steps.insert(0, step)
 
     @property

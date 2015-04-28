@@ -1,17 +1,17 @@
 import os
 
 from nanoci import git
-from nanoci.command import Command
+from nanoci.step import Step
 from nanoci.fileutils import read_path
 
 
-class GitCommand(Command):
-    """A command to checkout or update a git repository.
+class GitStep(Step):
+    """A step to checkout or update a git repository.
     """
-    name = 'git'
+    type = 'git'
 
-    def run(self, arguments, log_fp, env):
-        url = read_path(arguments['url'])
+    def run(self, log_fp, env):
+        url = read_path(self._arguments['url'])
         src_dir = env['SRC_DIR']
         if not os.path.isdir(src_dir):
             git.clone(log_fp, url, src_dir)

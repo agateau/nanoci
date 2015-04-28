@@ -1,14 +1,14 @@
 from subprocess import CalledProcessError
 
-from nanoci.command import Command
+from nanoci.step import Step
 from nanoci.subproclog import log_check_call
 
 
-class ShellCommand(Command):
-    name = 'shell'
+class ShellStep(Step):
+    type = 'shell'
 
-    def run(self, arguments, log_fp, env):
-        script = arguments['script']
+    def run(self, log_fp, env):
+        script = self._arguments['script']
         cwd = env['SRC_DIR']
         try:
             log_fp.write('## Script\n{}\n## Output\n'.format(script.strip()))

@@ -34,7 +34,7 @@ def test_project_unknown_step():
     with pytest.raises(ProjectError):
         prj = Project('test', {
             'build': [
-                dict(command='shell', script='make'),
-                dict(command='unknown')
+                dict(type='shell', script='make'),
+                dict(type='unknown')
             ]
         })
