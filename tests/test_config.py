@@ -7,9 +7,14 @@ from nanoci.config import Config
 from nanoci.fileutils import mkdir_p
 
 
-def create_project(tmpdir, name, dct):
+def create_project(tmpdir, name, build=None, notify=None):
     project_path = os.path.join(tmpdir, 'projects', name + '.yaml')
     mkdir_p(os.path.dirname(project_path))
+    dct = {}
+    if build is not None:
+        dct['build'] = build
+    if notify is not None:
+        dct['notify'] = notify
     with open(project_path, 'wt') as fp:
         yaml.dump(dct, fp)
 
@@ -17,27 +22,26 @@ def create_project(tmpdir, name, dct):
 def test_projects(tmpdir):
     tmpdir = str(tmpdir)
     config = Config(config_dir=tmpdir)
-    create_project(tmpdir, 'foo', dict(a=1))
-    create_project(tmpdir, 'bar', dict())
+    create_project(tmpdir, 'foo', build=[{'script':'make'}])
+    create_project(tmpdir, 'bar')
 
     assert config.has_project('foo')
     assert config.has_project('bar')
     assert not config.has_project('baz')
 
     foo = config.get_project('foo')
-    assert foo['a'] == 1
+    assert foo.build_steps[0]._arguments == {'script': 'make'}
 
 
 def test_reload_project(tmpdir):
     tmpdir = str(tmpdir)
     config = Config(config_dir=tmpdir)
-    create_project(tmpdir, 'foo', dict(a=1))
+    create_project(tmpdir, 'foo', build=[{'script':'make'}])
 
     foo = config.get_project('foo')
-    assert foo['a'] == 1
+    assert foo.build_steps[0]._arguments == {'script': 'make'}
 
-    with open(config._get_project_path('foo'), 'wt') as fp:
-        yaml.dump(dict(a=2), fp)
+    create_project(tmpdir, 'foo', build=[{'script':'make test'}])
 
     foo = config.get_project('foo')
-    assert foo['a'] == 2
+    assert foo.build_steps[0]._arguments == {'script': 'make test'}

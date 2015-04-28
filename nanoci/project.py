@@ -38,16 +38,16 @@ class Project(object):
     def __init__(self, name, path_or_dict):
         self._name = name
         if isinstance(path_or_dict, dict):
-            self._dct = path_or_dict
+            dct = path_or_dict
         else:
-            self._dct = read_yaml_dict(path_or_dict)
+            dct = read_yaml_dict(path_or_dict)
 
-        self._build_steps = _load_steps(self._dct, 'build')
-        self._notify_steps = _load_steps(self._dct, 'notify')
+        self._build_steps = _load_steps(dct, 'build')
+        self._notify_steps = _load_steps(dct, 'notify')
 
         # Legacy code, should go away
-        if 'source' in self._dct:
-            self._insert_git_step(self._dct['source']['url'])
+        if 'source' in dct:
+            self._insert_git_step(dct['source']['url'])
 
     def _insert_git_step(self, url):
         from nanoci.gitcommand import GitCommand
@@ -65,9 +65,3 @@ class Project(object):
     @property
     def notify_steps(self):
         return self._notify_steps
-
-    def __getitem__(self, name):
-        return self._dct[name]
-
-    def get(self, name, default=None):
-        return self._dct.get(name, default)
