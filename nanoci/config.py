@@ -1,7 +1,6 @@
 import os
-import yaml
 
-from nanoci.fileutils import mkdir_p, read_path
+from nanoci.fileutils import mkdir_p, read_path, read_yaml_dict
 from nanoci.project import Project
 
 
@@ -10,11 +9,7 @@ class Config(object):
         self._config_dir = read_path(config_dir)
 
         config_file = os.path.join(self._config_dir, 'nanoci.yaml')
-        if os.path.exists(config_file):
-            with open(config_file) as f:
-                dct = yaml.load(f)
-        else:
-            dct = {}
+        dct = read_yaml_dict(config_file)
 
         self._work_base_dir = read_path(dct.get('work_base_dir', '~/.cache/nanoci'))
         mkdir_p(self._work_base_dir)

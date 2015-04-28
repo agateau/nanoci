@@ -1,8 +1,4 @@
-import os
-
-import yaml
-
-from nanoci.fileutils import read_path
+from nanoci.fileutils import read_yaml_dict
 
 
 class Project(object):
@@ -11,12 +7,7 @@ class Project(object):
         if isinstance(path_or_dict, dict):
             self._dct = path_or_dict
         else:
-            path = read_path(path_or_dict)
-            if os.path.exists(path):
-                with open(path) as fp:
-                    self._dct = yaml.load(fp)
-            else:
-                self._dct = {}
+            self._dct = read_yaml_dict(path_or_dict)
 
     @property
     def name(self):
