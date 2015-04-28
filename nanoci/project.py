@@ -12,11 +12,13 @@ def _load_steps(dct, step_type):
         return []
 
     # FIXME: get available commands from somewhere else
+    from nanoci.gitcommand import GitCommand
     from nanoci.shellcommand import ShellCommand
     commands = {}
     def add_command(klass):
         commands[klass.name] = klass()
     add_command(ShellCommand)
+    add_command(GitCommand)
 
     out_lst = []
     for idx, dct in enumerate(in_lst):

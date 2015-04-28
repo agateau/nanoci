@@ -2,12 +2,8 @@ import os
 import traceback
 
 from datetime import datetime
-from subprocess import CalledProcessError
 
-from nanoci import git
-
-from nanoci.fileutils import mkdir_p, read_path
-from nanoci.subproclog import log_check_call
+from nanoci.fileutils import mkdir_p
 
 
 STATUS_NEW = 'NEW'
@@ -52,12 +48,11 @@ class Builder(object):
         self.log_fp.flush()
 
     def check_source(self):
-        self.log('Running step "git"')
-        source_url = read_path(self.project['source']['url'])
-        if not os.path.isdir(self.src_dir):
-            git.clone(self.log_fp, source_url, self.src_dir)
-        git.update(self.log_fp, self.src_dir, self.commit_id)
-        self.log_fp.flush()
+        from nanoci.gitcommand import GitCommand
+        cmd = GitCommand()
+        source_url = self.project['source']['url']
+        env = {'SRC_DIR': self.src_dir, 'COMMIT_ID': self.commit_id}
+        cmd.run({'url': source_url}, self.log_fp, env=env)
 
     def run_steps(self, step_type, steps):
         """
