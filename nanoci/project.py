@@ -6,8 +6,8 @@ class ProjectError(Exception):
     pass
 
 
-def _load_steps(dct, step_type):
-    in_lst = dct.get(step_type)
+def _load_steps(dct, category):
+    in_lst = dct.get(category)
     if in_lst is None:
         return []
 
@@ -27,7 +27,7 @@ def _load_steps(dct, step_type):
             command = commands[name]
         except KeyError:
             raise ProjectError('{}-{}: Unknown command "{}"'
-                               .format(step_type, idx + 1, name))
+                               .format(category, idx + 1, name))
         arguments = dct
         step = Step(command, arguments)
         out_lst.append(step)

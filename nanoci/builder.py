@@ -47,7 +47,7 @@ class Builder(object):
         self.log_fp.write('# ' + timestamp + ': ' + message + '\n')
         self.log_fp.flush()
 
-    def run_steps(self, step_type, steps):
+    def run_steps(self, category, steps):
         """
         Run steps, returns True on success, False on failure
         """
@@ -63,7 +63,7 @@ class Builder(object):
             'BUILD_STATUS': self.status,
         })
         for idx, step in enumerate(steps):
-            self.log('Running step {}-{}'.format(step_type, idx + 1))
+            self.log('Running step {}-{}'.format(category, idx + 1))
             if not step.run(self.log_fp, env=env):
                 return False
         return True
