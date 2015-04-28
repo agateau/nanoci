@@ -6,6 +6,8 @@ import pytest
 
 from nanoci.builder import Builder, STATUS_SUCCESS, STATUS_FAILURE
 from nanoci.project import Project
+from nanoci.step import Step
+from nanoci.stepcreator import StepCreator
 
 
 class FakeObject(object):
@@ -14,6 +16,13 @@ class FakeObject(object):
 
     def __getattr__(self, name):
         return self._dct[name]
+
+
+class FakeStep(Step):
+    type = 'fake'
+
+    def run(self, log_fp, env):
+        return self._arguments['ok']
 
 
 def create_repo(src_dir, tmpdir):
@@ -43,10 +52,9 @@ def test_builder(tmpdir, builder_info):
 
     project = Project('test', {
         'build': [
-            dict(type='git', url=url),
-            dict(script='./build.sh'),
+            dict(type='fake', ok=builder_info['success'])
         ]
-    })
+    }, step_creator=StepCreator([FakeStep]))
 
     builder = Builder(config, project, 'HEAD')
     builder.build()

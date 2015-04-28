@@ -8,10 +8,12 @@ from nanoci.builder import Builder
 from nanoci.config import Config
 from nanoci.process_queue import ProcessQueue
 from nanoci.project import Project
+from nanoci.stepcreator import StepCreator
 
 
 config = None
 queue = None
+step_creator = StepCreator()
 webapp = Flask(__name__)
 
 
@@ -43,7 +45,7 @@ def show_queue():
 
 def _build(name, commit_id):
     project_path = config.get_project_path(name)
-    project = Project(name, project_path)
+    project = Project(name, project_path, step_creator=step_creator)
     builder = Builder(config, project, commit_id)
     builder.build()
 
@@ -51,11 +53,19 @@ def _build(name, commit_id):
 def main():
     global config
     global queue
+    global step_creator
     logging.basicConfig(format='%(asctime)s %(levelname)s: %(name)s/%(process)d: %(message)s',
                         datefmt='%Y-%m-%d %H:%M:%S',
                         level=logging.INFO)
 
     config = Config()
+
+    # FIXME: get available step_classes from somewhere else
+    from nanoci.gitstep import GitStep
+    from nanoci.shellstep import ShellStep
+    step_creator.add_step_class(ShellStep)
+    step_creator.add_step_class(GitStep)
+
     queue = ProcessQueue(_build)
     webapp.run(port=config.port)
 

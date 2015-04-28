@@ -5,44 +5,33 @@ class ProjectError(Exception):
     pass
 
 
-def _load_steps(dct, category):
+def _load_steps(dct, category, step_creator):
     in_lst = dct.get(category)
     if in_lst is None:
         return []
 
-    # FIXME: get available step_classes from somewhere else
-    from nanoci.gitstep import GitStep
-    from nanoci.shellstep import ShellStep
-    step_classes = {}
-    def add_step_class(klass):
-        step_classes[klass.type] = klass
-    add_step_class(ShellStep)
-    add_step_class(GitStep)
-
     out_lst = []
     for idx, dct in enumerate(in_lst):
-        ttype = dct.get('type', 'shell')
+        step_type = dct.get('type', 'shell')
         try:
-            step_class = step_classes[ttype]
+            step = step_creator.create(step_type, dct)
         except KeyError:
             raise ProjectError('{}-{}: Unknown step type "{}"'
-                               .format(category, idx + 1, ttype))
-        arguments = dct
-        step = step_class(arguments)
+                               .format(category, idx + 1, step_type))
         out_lst.append(step)
     return out_lst
 
 
 class Project(object):
-    def __init__(self, name, path_or_dict):
+    def __init__(self, name, path_or_dict, step_creator):
         self._name = name
         if isinstance(path_or_dict, dict):
             dct = path_or_dict
         else:
             dct = read_yaml_dict(path_or_dict)
 
-        self._build_steps = _load_steps(dct, 'build')
-        self._notify_steps = _load_steps(dct, 'notify')
+        self._build_steps = _load_steps(dct, 'build', step_creator)
+        self._notify_steps = _load_steps(dct, 'notify', step_creator)
 
     @property
     def name(self):
