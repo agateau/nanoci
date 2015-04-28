@@ -3,8 +3,6 @@ import os
 import sys
 import argparse
 
-import requests
-
 from nanoci.app import App
 from nanoci.builder import Builder
 
