@@ -10,21 +10,28 @@ Optionally, run tests:
 
 ## Project configuration
 
-Create `~/.config/nanoci/projects/foo.yaml` with this content:
+Create a `~/.config/nanoci/projects/foo.yaml` with content similar to this:
 
-    source:
-        url: <git_url>
     build:
+        - type: git
+          url: /path/to/a/git/repo  # Can also be a remote git url
+
+        # A single-line script to run
         - type: shell
-          name: build
-          script: ...
+          script: make
+
+        # A multi-line script to run
         - type: shell
-          name: test
-          script: ...
+          script: |
+            make target1
+            make target2
+
     notify:
+        # An example of a command to run at the end of the build
         - type: shell
           name: notify
-          script: ...
+          script: |
+            notify-send "$PROJECT_NAME $COMMIT_ID: $BUILD_STATUS"
 
 ## Global configuration
 

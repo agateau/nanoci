@@ -42,12 +42,10 @@ def test_builder(tmpdir, builder_info):
     })
 
     project = Project('test', {
-        'source': {
-            'url': url
-        },
-        'build': [{
-            'script': './build.sh'
-        }]
+        'build': [
+            dict(type='git', url=url),
+            dict(script='./build.sh'),
+        ]
     })
 
     builder = Builder(config, project, 'HEAD')
