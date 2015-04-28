@@ -5,7 +5,14 @@ import subprocess
 import pytest
 
 from nanoci.builder import Builder, STATUS_SUCCESS, STATUS_FAILURE
-from nanoci.config import Config
+
+
+class FakeObject(object):
+    def __init__(self, dct):
+        self._dct = dct
+
+    def __getattr__(self, name):
+        return self._dct[name]
 
 
 def create_repo(src_dir, tmpdir):
@@ -29,8 +36,7 @@ def builder_info(request):
 def test_builder(tmpdir, builder_info):
     tmpdir = str(tmpdir)
     url = create_repo(builder_info['dir'], tmpdir)
-
-    config = Config({
+    config = FakeObject({
         'work_base_dir': tmpdir,
     })
 
