@@ -14,10 +14,10 @@ from nanoci.stepcreator import StepCreator
 config = None
 queue = None
 step_creator = StepCreator()
-webapp = Flask(__name__)
+app = Flask(__name__)
 
 
-@webapp.route('/projects/<name>/build')
+@app.route('/projects/<name>/build')
 def build(name):
     commit_id = request.args.get('commit_id', 'origin/HEAD')
     logging.info('Received request to build %s %s', name, commit_id)
@@ -25,7 +25,7 @@ def build(name):
     return json.dumps({'queue_size': qsize})
 
 
-@webapp.route('/queue')
+@app.route('/queue')
 def show_queue():
     def _format_queue_args(queue_item):
         if queue_item is None:
@@ -67,7 +67,7 @@ def main():
     step_creator.add_step_class(GitStep)
 
     queue = ProcessQueue(_build)
-    webapp.run(port=config.port)
+    app.run(port=config.port)
 
 
 if __name__ == '__main__':
