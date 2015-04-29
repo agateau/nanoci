@@ -11,8 +11,6 @@ class ShellStep(StepMixin):
         script = self._arguments['script']
         cwd = env['SRC_DIR']
         try:
-            log_fp.write('## Script\n{}\n## Output\n'.format(script.strip()))
-            log_fp.flush()
             log_check_call(log_fp, script, shell=True, env=env, cwd=cwd)
             return True
         except CalledProcessError as exc:

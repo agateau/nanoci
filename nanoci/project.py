@@ -12,9 +12,13 @@ def _load_steps(dct, category, step_creator):
 
     out_lst = []
     for idx, dct in enumerate(in_lst):
-        step_type = dct.get('type', 'shell')
+        arguments = dict(dct)
         try:
-            step = step_creator.create(step_type, dct)
+            step_type = arguments.pop('type')
+        except KeyError:
+            step_type = 'shell'
+        try:
+            step = step_creator.create(step_type, arguments)
         except KeyError:
             raise ProjectError('{}-{}: Unknown step type "{}"'
                                .format(category, idx + 1, step_type))

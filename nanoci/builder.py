@@ -63,7 +63,7 @@ class Builder(object):
             'BUILD_STATUS': self.status,
         })
         for idx, step in enumerate(steps):
-            self.log('Running step {}-{}'.format(category, idx + 1))
+            self.log('Running step {}-{}: {}'.format(category, idx + 1, step))
             if not step.run(self.log_fp, env=env):
                 return False
         return True
