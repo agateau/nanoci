@@ -1,6 +1,6 @@
 class Step(object):
-    """A step in a project. This is an abstract class. Inherited class must
-    set `type` and implement `run`."""
+    """A step in a project. This is an abstract class. Classes inheriting from
+    this class must set `type` and implement `run`."""
     type = 'set-me'
 
     def __init__(self, arguments):
