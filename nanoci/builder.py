@@ -7,6 +7,7 @@ from nanoci.fileutils import mkdir_p
 
 
 STATUS_NEW = 'NEW'
+STATUS_STARTED = 'STARTED'
 STATUS_SUCCESS = 'SUCCESS'
 STATUS_FAILURE = 'FAILURE'
 
@@ -69,6 +70,7 @@ class Builder(object):
         return True
 
     def build(self):
+        self.status = STATUS_STARTED
         log_file_path = os.path.join(self.log_dir, Builder.BUILD_LOG_NAME)
         with open(log_file_path, 'w') as self.log_fp:
             self.log('Starting build #{}'.format(self.build_id))
