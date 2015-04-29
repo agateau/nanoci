@@ -1,5 +1,7 @@
 # Nanoci
 
+Nanoci is a personal CI server, designed to run on your developer machine.
+
 ## Install
 
     ./setup.py install
@@ -72,3 +74,11 @@ And make it executable.
 
 Note that you should use `post-commit`, not `pre-commit` because Nanoci needs
 the commit ID to start building, so the commit must have been created.
+
+## Author
+
+Aurélien Gâteau
+
+## License
+
+3-clause BSD
