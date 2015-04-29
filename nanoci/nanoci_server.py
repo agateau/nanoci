@@ -6,6 +6,7 @@ from flask import Flask, request
 
 from nanoci.builder import Builder
 from nanoci.config import Config
+from nanoci.externalstepfactory import ExternalStepFactory, find_step_executables
 from nanoci.process_queue import ProcessQueue
 from nanoci.project import Project
 from nanoci.stepcreator import StepCreator
@@ -65,6 +66,10 @@ def main():
     from nanoci.shellstep import ShellStep
     step_creator.add_factory(ShellStep)
     step_creator.add_factory(GitStep)
+
+    executables = find_step_executables()
+    for executable in executables:
+        step_creator.add_factory(ExternalStepFactory(executable))
 
     queue = ProcessQueue(_build)
     app.run(port=config.port)
