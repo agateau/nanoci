@@ -63,8 +63,8 @@ def main():
     # FIXME: get available step_classes from somewhere else
     from nanoci.gitstep import GitStep
     from nanoci.shellstep import ShellStep
-    step_creator.add_step_class(ShellStep)
-    step_creator.add_step_class(GitStep)
+    step_creator.add_factory(ShellStep)
+    step_creator.add_factory(GitStep)
 
     queue = ProcessQueue(_build)
     app.run(port=config.port)

@@ -2,8 +2,8 @@ import pytest
 
 from nanoci.builder import Builder, STATUS_SUCCESS, STATUS_FAILURE
 from nanoci.project import Project
-from nanoci.step import Step
 from nanoci.stepcreator import StepCreator
+from nanoci.stepmixin import StepMixin
 
 
 class FakeObject(object):
@@ -14,8 +14,8 @@ class FakeObject(object):
         return self._dct[name]
 
 
-class FakeStep(Step):
-    type = 'fake'
+class FakeStep(StepMixin):
+    step_type = 'fake'
 
     def run(self, log_fp, env):
         return self._arguments['ok']

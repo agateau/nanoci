@@ -1,11 +1,11 @@
 from subprocess import CalledProcessError
 
-from nanoci.step import Step
+from nanoci.stepmixin import StepMixin
 from nanoci.subproclog import log_check_call
 
 
-class ShellStep(Step):
-    type = 'shell'
+class ShellStep(StepMixin):
+    step_type = 'shell'
 
     def run(self, log_fp, env):
         script = self._arguments['script']

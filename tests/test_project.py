@@ -1,16 +1,16 @@
 import pytest
 
 from nanoci.project import Project, ProjectError
-from nanoci.step import Step
 from nanoci.stepcreator import StepCreator
+from nanoci.stepmixin import StepMixin
 
 
-class FooStep(Step):
-    type = 'foo'
+class FooStep(StepMixin):
+    step_type = 'foo'
 
 
-class BarStep(Step):
-    type = 'bar'
+class BarStep(StepMixin):
+    step_type = 'bar'
 
 
 def create_step_creator():

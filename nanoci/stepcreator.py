@@ -1,13 +1,13 @@
 class StepCreator(object):
-    def __init__(self, step_classes=None):
-        self._classes = {}
-        if step_classes is not None:
-            for step_class in step_classes:
-                self.add_step_class(step_class)
+    def __init__(self, factories=None):
+        self._factories = {}
+        if factories is not None:
+            for factory in factories:
+                self.add_factory(factory)
 
-    def add_step_class(self, step_class):
-        self._classes[step_class.type] = step_class
+    def add_factory(self, factory):
+        self._factories[factory.step_type] = factory
 
     def create(self, step_type, arguments):
-        step_class = self._classes[step_type]
-        return step_class(arguments)
+        factory = self._factories[step_type]
+        return factory(arguments)

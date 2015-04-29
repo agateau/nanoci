@@ -3,14 +3,14 @@ import os
 from subprocess import CalledProcessError
 
 from nanoci.fileutils import read_path
-from nanoci.step import Step
+from nanoci.stepmixin import StepMixin
 from nanoci.subproclog import log_check_call
 
 
-class GitStep(Step):
+class GitStep(StepMixin):
     """A step to checkout or update a git repository.
     """
-    type = 'git'
+    step_type = 'git'
 
     def run(self, log_fp, env):
         url = read_path(self._arguments['url'])
