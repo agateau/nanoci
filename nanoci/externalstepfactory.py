@@ -14,8 +14,10 @@ from nanoci.subproclog import log_check_call
 EXECUTABLE_PREFIX = '_nanoci-step-'
 
 
-def find_step_executables():
-    path_dirs = os.environ['PATH'].split(':')
+def find_step_executables(environ=None):
+    if environ is None:
+        environ = os.environ
+    path_dirs = environ['PATH'].split(':')
     for path_dir in path_dirs:
         for executable in os.listdir(path_dir):
             if executable.startswith(EXECUTABLE_PREFIX):
