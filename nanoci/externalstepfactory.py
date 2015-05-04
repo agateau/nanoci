@@ -19,6 +19,8 @@ def find_step_executables(environ=None):
         environ = os.environ
     path_dirs = environ['PATH'].split(':')
     for path_dir in path_dirs:
+        if not os.path.isdir(path_dir):
+            continue
         for executable in os.listdir(path_dir):
             if executable.startswith(EXECUTABLE_PREFIX):
                 yield os.path.join(path_dir, executable)

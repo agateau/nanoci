@@ -29,3 +29,10 @@ def test_find_executables(tmpdir):
     result = list(find_step_executables(environ=env))
 
     assert result == [exe2, exe3]
+
+
+def test_find_executables_skip_non_existent_dirs(tmpdir):
+    tmpdir = str(tmpdir)
+    env = dict(PATH=os.path.join(tmpdir, '/does/not/exist'))
+    result = list(find_step_executables(environ=env))
+    assert result == []
