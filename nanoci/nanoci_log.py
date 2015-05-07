@@ -4,6 +4,8 @@ import os
 import sys
 import time
 
+from pydoc import pager
+
 from nanoci.config import Config
 from nanoci.builder import Builder
 
@@ -60,7 +62,7 @@ def main():
     log_dir = os.path.join(log_base_dir, build_id)
 
     log_path = os.path.join(log_dir, Builder.BUILD_LOG_NAME)
-    print(open(log_path, 'rt').read())
+    pager(open(log_path, 'rt').read())
 
 
 if __name__ == '__main__':
