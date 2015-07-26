@@ -1,12 +1,14 @@
 import os
 
-from nanoci.externalstepfactory import find_step_executables
+from io import StringIO
+
+from nanoci.externalstepfactory import ExternalStep, find_step_executables
 
 
-def create_executable(dirname, filename):
+def create_executable(dirname, filename, content=None):
     path = os.path.join(dirname, filename)
     with open(path, 'w') as f:
-        f.write('')
+        f.write(content or '')
     os.chmod(path, 0o755)
     return path
 
@@ -36,3 +38,25 @@ def test_find_executables_skip_non_existent_dirs(tmpdir):
     env = dict(PATH=os.path.join(tmpdir, '/does/not/exist'))
     result = list(find_step_executables(environ=env))
     assert result == []
+
+
+def test_run_in_src_dir(tmpdir):
+    tmpdir = str(tmpdir)
+    bin_dir = os.path.join(tmpdir, 'bin')
+    os.mkdir(bin_dir)
+
+    create_executable(bin_dir, '_nanoci-step-echo-pwd', \
+        content='#!/bin/sh\necho $PWD')
+
+    src_dir = os.path.join(tmpdir, 'src')
+    os.mkdir(src_dir)
+
+    env = dict(SRC_DIR=src_dir, PATH=bin_dir + ':/usr/bin:/bin')
+
+    step = ExternalStep(step_type='test', executable='_nanoci-step-echo-pwd', arguments={})
+
+    out_log = os.path.join(tmpdir, 'out.log')
+    with open(out_log, 'wt') as fp:
+        step.run(fp, env=env)
+    output = open(out_log).read()
+    assert output.strip() == src_dir
